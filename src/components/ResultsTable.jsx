@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import { Table2, ChevronUp, ChevronDown, Search } from "lucide-react";
+import { Table2, ChevronUp, ChevronDown, Search, Banknote, Coins } from "lucide-react";
 import { DENOMINATIONS } from "../utils/denominationCalculator";
 
 function formatNumber(num) {
@@ -122,8 +122,12 @@ export default function ResultsTable({ result }) {
                   className="group px-1 py-3 text-center cursor-pointer border-b border-surface-container-high print:border-black print:border"
                   onClick={() => handleSort(denom)}
                 >
-                  <div className="flex flex-col items-center justify-center gap-0.5 text-[11px] font-bold text-primary-800/70 print:text-black">
-                    <span className="print:hidden">{denom >= 20 ? "แบงก์" : "เหรียญ"}</span>
+                  <div className="flex flex-col items-center justify-center gap-1 text-[11px] font-bold text-primary-800/70 print:text-black">
+                    {denom >= 20 ? (
+                      <Banknote className="w-4 h-4 text-primary-800/40 print:text-black print:w-3 print:h-3 print:hidden" />
+                    ) : (
+                      <Coins className="w-4 h-4 text-primary-800/40 print:text-black print:w-3 print:h-3 print:hidden" />
+                    )}
                     <div className="flex items-center gap-1">
                       {denom} <SortIcon column={denom} />
                     </div>

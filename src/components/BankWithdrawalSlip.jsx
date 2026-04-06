@@ -1,3 +1,4 @@
+import { Banknote, Coins } from "lucide-react";
 import { DENOMINATIONS } from "../utils/denominationCalculator";
 
 function formatNumber(num) {
@@ -55,7 +56,12 @@ export default function BankWithdrawalSlip({ result, fileData }) {
             
             return (
               <tr key={denom}>
-                <td className="border border-black p-3 text-center font-bold">฿{formatNumber(denom)}</td>
+                <td className="border border-black p-3 font-bold">
+                  <div className="flex items-center justify-center gap-2">
+                    {denom >= 20 ? <Banknote className="w-5 h-5 text-gray-700" /> : <Coins className="w-5 h-5 text-gray-700" />}
+                    <span>฿{formatNumber(denom)}</span>
+                  </div>
+                </td>
                 <td className="border border-black p-3 text-center text-lg">{formatNumber(count)}</td>
                 <td className="border border-black p-3 text-right font-bold">{formatNumber(totalValue)}</td>
               </tr>

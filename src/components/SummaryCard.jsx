@@ -70,7 +70,7 @@ export default function SummaryCard({ result }) {
         {/* Notes Section */}
         <div>
           <div className="flex items-center gap-3 mb-6">
-            <div className="w-1 h-6 bg-primary-800 rounded-full" />
+            <Banknote className="w-5 h-5 text-primary-800" />
             <span className="text-sm font-extrabold uppercase tracking-[0.2em] text-primary-800">
               รายการธนบัตร
             </span>
@@ -96,7 +96,7 @@ export default function SummaryCard({ result }) {
         {/* Coins Section */}
         <div>
           <div className="flex items-center gap-3 mb-6">
-            <div className="w-1 h-6 bg-amber-600 rounded-full" />
+            <Coins className="w-5 h-5 text-amber-600" />
             <span className="text-sm font-extrabold uppercase tracking-[0.2em] text-amber-600">
               รายการเหรียญ
             </span>

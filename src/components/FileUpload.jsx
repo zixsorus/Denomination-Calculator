@@ -1,5 +1,6 @@
 import { useState, useRef, useCallback } from "react";
-import { Upload, FileSpreadsheet, X, AlertCircle, ClipboardPaste, ArrowRight } from "lucide-react";
+// เพิ่มไอคอน Download เข้ามา
+import { Upload, FileSpreadsheet, X, AlertCircle, ClipboardPaste, ArrowRight, Download } from "lucide-react";
 import { parseFile, parseText } from "../utils/fileParser";
 
 export default function FileUpload({ onFileProcessed }) {
@@ -176,13 +177,29 @@ export default function FileUpload({ onFileProcessed }) {
                     เลือกไฟล์จากคอมพิวเตอร์
                   </span>
                 </p>
-                <div className="mt-8 flex items-center justify-center gap-4 text-xs font-bold text-on-surface-variant/40 uppercase tracking-widest">
-                  <span>XLSX</span>
-                  <div className="w-1 h-1 rounded-full bg-on-surface-variant/20" />
-                  <span>CSV</span>
-                  <div className="w-1 h-1 rounded-full bg-on-surface-variant/20" />
-                  <span>จำกัด 50MB</span>
+                
+                <div className="mt-8 flex flex-col items-center gap-4">
+                  {/* File Type Limit Info */}
+                  <div className="flex items-center justify-center gap-4 text-xs font-bold text-on-surface-variant/40 uppercase tracking-widest">
+                    <span>XLSX</span>
+                    <div className="w-1 h-1 rounded-full bg-on-surface-variant/20" />
+                    <span>CSV</span>
+                    <div className="w-1 h-1 rounded-full bg-on-surface-variant/20" />
+                    <span>จำกัด 50MB</span>
+                  </div>
+
+                  {/* เพิ่มปุ่ม Download Template ตรงนี้ */}
+                  <a
+                    href="/sample_payroll.csv"
+                    download="Template_Payroll.csv"
+                    onClick={(e) => e.stopPropagation()} 
+                    className="inline-flex items-center gap-2 px-5 py-2.5 mt-2 rounded-xl text-xs font-bold text-primary-700 bg-primary-800/5 hover:bg-primary-800/15 border border-primary-800/10 transition-all uppercase tracking-wider z-10 relative"
+                  >
+                    <Download className="w-4 h-4" />
+                    ดาวน์โหลดไฟล์ต้นแบบ (Template)
+                  </a>
                 </div>
+
               </div>
             </div>
           ) : (
@@ -221,12 +238,26 @@ export default function FileUpload({ onFileProcessed }) {
           <div className="absolute top-8 right-8 text-primary-800/10 pointer-events-none">
             <ClipboardPaste className="w-24 h-24" />
           </div>
-          <h3 className="text-xl font-bold text-primary-800 tracking-tight mb-2">
-            วางข้อมูลรายการเงินเดือน
-          </h3>
-          <p className="text-sm font-medium text-on-surface-variant/80 mb-6 max-w-lg">
-            คัดลอกข้อมูลตารางจาก Excel หรือ Google Sheets (ประกอบด้วยคอลัมน์ชื่อและจำนวนเงิน) แล้วนำมาวางในช่องด้านล่าง
-          </p>
+          <div className="flex justify-between items-start mb-6">
+            <div>
+              <h3 className="text-xl font-bold text-primary-800 tracking-tight mb-2">
+                วางข้อมูลรายการเงินเดือน
+              </h3>
+              <p className="text-sm font-medium text-on-surface-variant/80 max-w-lg">
+                คัดลอกข้อมูลตารางจาก Excel หรือ Google Sheets (ประกอบด้วยคอลัมน์ชื่อและจำนวนเงิน) แล้วนำมาวางในช่องด้านล่าง
+              </p>
+            </div>
+            
+            {/* เพิ่มปุ่ม Download Template ในโหมด Paste ด้วย (เผื่อ HR อยากเห็นตัวอย่าง) */}
+            <a
+              href="/sample_payroll.csv"
+              download="Template_Payroll.csv"
+              className="hidden sm:inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold text-primary-700 bg-primary-800/5 hover:bg-primary-800/10 border border-primary-800/10 transition-all uppercase tracking-wider"
+            >
+              <Download className="w-4 h-4" />
+              โหลดต้นแบบ
+            </a>
+          </div>
           
           <textarea
             value={pastedText}
@@ -269,8 +300,6 @@ export default function FileUpload({ onFileProcessed }) {
           </div>
         </div>
       )}
-
-
     </div>
   );
 }
