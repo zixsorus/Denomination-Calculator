@@ -22,6 +22,48 @@ export async function parseFile(file) {
   }
 }
 
+/**
+ * Parse pasted raw text (usually TSV from Excel/Sheets) and return headers + rows.
+ * @param {string} text - The pasted text
+ * @returns {Promise<{ headers: string[], rows: any[][] }>}
+ */
+export async function parseText(text) {
+  return new Promise((resolve, reject) => {
+    // Trim to avoid completely empty parsing if they just paste spaces
+    const trimmed = text.trim();
+    if (!trimmed) {
+      reject(new Error("ไม่มีข้อมูลให้ประมวลผล (Empty data)"));
+      return;
+    }
+
+    Papa.parse(trimmed, {
+      delimiter: "\t", // Default from Excel/Sheets pasting
+      complete: (results) => {
+        if (results.data.length === 0) {
+          reject(new Error("The text data is empty."));
+          return;
+        }
+        
+        // If length is 1 and it doesn't look like TSV, try auto-detect (CSV)
+        let dataToUse = results.data;
+        if (dataToUse.length > 0 && dataToUse[0].length === 1 && trimmed.includes(',')) {
+          const autoRes = Papa.parse(trimmed);
+          dataToUse = autoRes.data;
+        }
+
+        const headers = dataToUse[0];
+        const rows = dataToUse.slice(1).filter((row) =>
+          row.some((cell) => cell !== null && cell !== undefined && String(cell).trim() !== "")
+        );
+        resolve({ headers, rows });
+      },
+      error: (error) => {
+        reject(new Error(`Text parsing error: ${error.message}`));
+      },
+    });
+  });
+}
+
 function parseCSV(file) {
   return new Promise((resolve, reject) => {
     Papa.parse(file, {
