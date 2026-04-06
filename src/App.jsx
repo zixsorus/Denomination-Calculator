@@ -33,7 +33,6 @@ export default function App() {
   const [result, setResult] = useState(null);
   const [skippedRows, setSkippedRows] = useState([]);
   const [showSkipped, setShowSkipped] = useState(true);
-  const [printMode, setPrintMode] = useState("all"); // 'all' | 'slip' | 'table'
 
   const handleFileProcessed = useCallback(({ fileName, headers, rows }) => {
     setFileData({ fileName, headers, rows });
@@ -98,14 +97,6 @@ export default function App() {
     link.download = "รายการแบ่งเงินย่อย.csv";
     link.click();
     URL.revokeObjectURL(url);
-  };
-
-  const triggerPrint = (mode) => {
-    setPrintMode(mode);
-    setTimeout(() => {
-      window.print();
-      setPrintMode("all");
-    }, 200);
   };
 
   return (
@@ -222,26 +213,15 @@ export default function App() {
                   <Download className="w-4 h-4" />
                   ส่งออกข้อมูล
                 </button>
-                <div className="h-8 w-px bg-surface-container-high mx-2"></div>
                 <button
-                  onClick={() => triggerPrint('slip')}
+                  onClick={() => window.print()}
                   className="flex items-center gap-2 rounded-xl bg-white border border-surface-container-high
                     px-5 py-3 text-sm font-bold text-on-surface uppercase tracking-wider
                     hover:bg-surface-container-high transition-all shadow-sm"
-                  id="btn-print-slip"
+                  id="btn-print-report"
                 >
                   <Printer className="w-4 h-4" />
-                  พิมพ์ใบเบิกเงินย่อย
-                </button>
-                <button
-                  onClick={() => triggerPrint('table')}
-                  className="flex items-center gap-2 rounded-xl bg-white border border-surface-container-high
-                    px-5 py-3 text-sm font-bold text-on-surface uppercase tracking-wider
-                    hover:bg-surface-container-high transition-all shadow-sm"
-                  id="btn-print-table"
-                >
-                  <Table2 className="w-4 h-4" />
-                  พิมพ์สมุดกระจายเงิน
+                  พิมพ์รายการ
                 </button>
                 {fileData && (
                   <span className="ml-auto text-xs font-bold text-on-surface-variant/50 uppercase tracking-widest px-4">
@@ -258,18 +238,9 @@ export default function App() {
                 />
               )}
 
-              <div className={printMode === 'table' ? 'print:hidden' : ''}>
+              <div>
                 <BankWithdrawalSlip result={result} fileData={fileData} />
               </div>
-
-              {printMode === 'table' && (
-                <style>{`
-                  @page {
-                    size: A4 landscape !important;
-                    margin: 1cm;
-                  }
-                `}</style>
-              )}
 
               {/* Summary (Page 1) - ซ่อนตอนพิมพ์เพราะเราใช้ BankWithdrawalSlip แทนแล้ว */}
               <div className="print:hidden">
@@ -277,7 +248,7 @@ export default function App() {
               </div>
 
               {/* Individual Breakdown Table (Page 2) */}
-              <div className={`print-page-break ${printMode === 'slip' ? 'print:hidden' : ''}`}>
+              <div className="print-page-break">
                 <ResultsTable result={result} />
               </div>
             </div>
@@ -285,7 +256,7 @@ export default function App() {
         </main>
 
         {/* Footer */}
-        <footer className="mt-24 text-center">
+        <footer className="mt-24 text-center print:hidden">
           <div className="w-12 h-1 bg-surface-container-high mx-auto mb-8 rounded-full" />
           <p className="text-xs font-bold text-on-surface-variant/40 uppercase tracking-[0.2em]">
             ระบบจัดการเงินย่อยพนักงาน &copy; {new Date().getFullYear()}
