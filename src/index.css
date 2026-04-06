@@ -1,0 +1,131 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap');
+@import "tailwindcss";
+
+
+@theme {
+  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+  --font-display: "Manrope", sans-serif;
+
+  /* Bualuang Heritage (Digital Mint) Palette */
+  --color-primary-900: #001e2f;
+  --color-primary-800: #00334d;
+  --color-primary-700: #004b6e;
+  --color-primary-600: #296388;
+  --color-primary-500: #427c9f;
+  
+  --color-surface-base: #f8f9fc;
+  --color-surface-container-low: #f3f3f7;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-high: #edeef1;
+  --color-surface-container-highest: #e1e2e6;
+
+  --color-on-surface: #191c1e;
+  --color-on-surface-variant: #41484e;
+
+  --color-success-500: #2e7d32;
+  --color-warning-500: #6a3c03; /* Tertiary color for caution */
+  --color-danger-500: #ba1a1a;
+  
+  --shadow-premium: 0px 12px 32px rgba(0, 30, 47, 0.06);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-sans);
+  background: var(--color-surface-base);
+  min-height: 100vh;
+  color: var(--color-on-surface);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, .font-display {
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
+}
+
+/* ===== Glassmorphism & Tonal Layering Utilities ===== */
+.glass {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(20px);
+}
+
+.tonal-card {
+  background: var(--color-surface-container-lowest);
+  border: none;
+  box-shadow: var(--shadow-premium);
+  border-radius: 1rem;
+}
+
+.inner-glow:focus-within {
+  box-shadow: inset 0 0 0 1px rgba(151, 205, 246, 0.4);
+}
+
+/* ===== Print Styles ===== */
+@media print {
+  body {
+    background: #fff !important;
+    color: #1a1a1a !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  #stepper,
+  #btn-new-calculation,
+  #btn-export-csv,
+  #btn-print-report,
+  #search-employees,
+  #skipped-rows-alert,
+  footer,
+  .fixed {
+    display: none !important;
+  }
+
+  [class*="bg-surface"],
+  [class*="bg-primary"],
+  [class*="backdrop-blur"] {
+    background: #fff !important;
+    backdrop-filter: none !important;
+  }
+
+  table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+  }
+
+  th, td {
+    border: 1px solid #e1e2e6 !important;
+    padding: 8px 12px !important;
+  }
+
+  th {
+    background: #f3f3f7 !important;
+    font-weight: 700 !important;
+  }
+
+  tr:nth-child(even) td {
+    background: #f8f9fc !important;
+  }
+
+  @page {
+    margin: 1.5cm;
+    size: landscape;
+  }
+
+  .print-page-break {
+    break-after: page;
+  }
+
+  /* Ensure containers don't break inside where possible */
+  .tonal-card, 
+  [class*="rounded-"],
+  table {
+    break-inside: avoid;
+  }
+}
+
