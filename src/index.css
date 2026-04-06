@@ -113,8 +113,8 @@ h1, h2, h3, h4, .font-display {
   }
 
   @page {
-    margin: 1.5cm;
-    size: landscape;
+    size: A4 portrait;
+    margin: 1cm;
   }
 
   .print-page-break {

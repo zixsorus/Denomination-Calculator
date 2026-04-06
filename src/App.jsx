@@ -6,6 +6,7 @@ import {
   Printer,
   Sparkles,
   CheckCircle2,
+  Table2,
 } from "lucide-react";
 import FileUpload from "./components/FileUpload";
 import ColumnMapping from "./components/ColumnMapping";
@@ -17,6 +18,7 @@ import {
   calculateAllDenominations,
   DENOMINATIONS,
 } from "./utils/denominationCalculator";
+import BankWithdrawalSlip from "./components/BankWithdrawalSlip";
 
 // Steps for the stepper UI
 const STEPS = [
@@ -31,6 +33,7 @@ export default function App() {
   const [result, setResult] = useState(null);
   const [skippedRows, setSkippedRows] = useState([]);
   const [showSkipped, setShowSkipped] = useState(true);
+  const [printMode, setPrintMode] = useState("all"); // 'all' | 'slip' | 'table'
 
   const handleFileProcessed = useCallback(({ fileName, headers, rows }) => {
     setFileData({ fileName, headers, rows });
@@ -97,11 +100,19 @@ export default function App() {
     URL.revokeObjectURL(url);
   };
 
+  const triggerPrint = (mode) => {
+    setPrintMode(mode);
+    setTimeout(() => {
+      window.print();
+      setPrintMode("all");
+    }, 200);
+  };
+
   return (
     <div className="min-h-screen bg-surface-base">
       <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20">
         {/* Header */}
-        <header className="text-center mb-16">
+        <header className="text-center mb-16 print:hidden">
           
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-primary-800 tracking-tight leading-tight mb-4">
             ระบบคำนวณ{" "}
@@ -190,7 +201,7 @@ export default function App() {
           {currentStep === 2 && result && (
             <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
               {/* Action Bar */}
-              <div className="flex flex-wrap items-center gap-4 bg-surface-container-low p-3 rounded-2xl">
+              <div className="flex flex-wrap items-center gap-4 bg-surface-container-low p-3 rounded-2xl print:hidden">
                 <button
                   onClick={handleReset}
                   className="flex items-center gap-2 rounded-xl bg-white border border-surface-container-high
@@ -211,15 +222,26 @@ export default function App() {
                   <Download className="w-4 h-4" />
                   ส่งออกข้อมูล
                 </button>
+                <div className="h-8 w-px bg-surface-container-high mx-2"></div>
                 <button
-                  onClick={() => window.print()}
+                  onClick={() => triggerPrint('slip')}
                   className="flex items-center gap-2 rounded-xl bg-white border border-surface-container-high
                     px-5 py-3 text-sm font-bold text-on-surface uppercase tracking-wider
                     hover:bg-surface-container-high transition-all shadow-sm"
-                  id="btn-print-report"
+                  id="btn-print-slip"
                 >
                   <Printer className="w-4 h-4" />
-                  พิมพ์รายงาน
+                  พิมพ์ใบเบิกเงินย่อย
+                </button>
+                <button
+                  onClick={() => triggerPrint('table')}
+                  className="flex items-center gap-2 rounded-xl bg-white border border-surface-container-high
+                    px-5 py-3 text-sm font-bold text-on-surface uppercase tracking-wider
+                    hover:bg-surface-container-high transition-all shadow-sm"
+                  id="btn-print-table"
+                >
+                  <Table2 className="w-4 h-4" />
+                  พิมพ์สมุดกระจายเงิน
                 </button>
                 {fileData && (
                   <span className="ml-auto text-xs font-bold text-on-surface-variant/50 uppercase tracking-widest px-4">
@@ -236,13 +258,26 @@ export default function App() {
                 />
               )}
 
-              {/* Summary (Page 1) */}
-              <div className="print-page-break">
+              <div className={printMode === 'table' ? 'print:hidden' : ''}>
+                <BankWithdrawalSlip result={result} fileData={fileData} />
+              </div>
+
+              {printMode === 'table' && (
+                <style>{`
+                  @page {
+                    size: A4 landscape !important;
+                    margin: 1cm;
+                  }
+                `}</style>
+              )}
+
+              {/* Summary (Page 1) - ซ่อนตอนพิมพ์เพราะเราใช้ BankWithdrawalSlip แทนแล้ว */}
+              <div className="print:hidden">
                 <SummaryCard result={result} />
               </div>
 
               {/* Individual Breakdown Table (Page 2) */}
-              <div className="print:mt-0">
+              <div className={`print-page-break ${printMode === 'slip' ? 'print:hidden' : ''}`}>
                 <ResultsTable result={result} />
               </div>
             </div>

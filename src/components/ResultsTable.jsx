@@ -100,19 +100,19 @@ export default function ResultsTable({ result }) {
           <thead>
             <tr className="bg-surface-container-high/50">
               <th
-                className="group px-8 py-4 text-left cursor-pointer hover:bg-primary-800/5 transition-colors whitespace-nowrap"
+                className="group px-4 py-4 text-left cursor-pointer hover:bg-primary-800/5 transition-colors"
                 onClick={() => handleSort("name")}
               >
-                <div className="flex items-center gap-2 text-[10px] font-extrabold uppercase tracking-[0.2em] text-primary-800/40">
+                <div className="flex items-center gap-2 text-[10px] font-extrabold uppercase tracking-[0.2em] text-primary-800/40 whitespace-nowrap">
                   ผู้รับเงิน
                   <SortIcon column="name" />
                 </div>
               </th>
               <th
-                className="group px-8 py-4 text-right cursor-pointer hover:bg-primary-800/5 transition-colors whitespace-nowrap"
+                className="group px-4 py-4 text-right cursor-pointer hover:bg-primary-800/5 transition-colors"
                 onClick={() => handleSort("amount")}
               >
-                <div className="flex items-center justify-end gap-2 text-[10px] font-extrabold uppercase tracking-[0.2em] text-primary-800/40">
+                <div className="flex items-center justify-end gap-2 text-[10px] font-extrabold uppercase tracking-[0.2em] text-primary-800/40 whitespace-nowrap">
                   จำนวนเงินสุทธิ
                   <SortIcon column="amount" />
                 </div>
@@ -120,10 +120,10 @@ export default function ResultsTable({ result }) {
               {DENOMINATIONS.map((denom) => (
                 <th
                   key={denom}
-                  className="group px-6 py-4 text-right cursor-pointer hover:bg-primary-800/5 transition-colors whitespace-nowrap"
+                  className="group px-2 sm:px-3 py-4 text-right cursor-pointer hover:bg-primary-800/5 transition-colors"
                   onClick={() => handleSort(denom)}
                 >
-                  <div className="flex items-center justify-end gap-1.5 text-[10px] font-extrabold uppercase tracking-[0.2em] text-primary-800/40">
+                  <div className="flex items-center justify-end gap-1 text-[10px] font-extrabold uppercase tracking-[0.2em] text-primary-800/40">
                     ฿{denom}
                     <SortIcon column={denom} />
                   </div>
@@ -147,16 +147,16 @@ export default function ResultsTable({ result }) {
                   key={idx}
                   className="transition-colors even:bg-surface-container-low/30 odd:bg-white hover:bg-primary-800/5"
                 >
-                  <td className="px-8 py-5 font-bold text-primary-800 whitespace-nowrap">
+                  <td className="px-4 py-4 font-bold text-primary-800 line-clamp-2 md:line-clamp-none min-w-[120px]">
                     {emp.id_or_name}
                   </td>
-                  <td className="px-8 py-5 text-right font-extrabold text-primary-800 whitespace-nowrap">
+                  <td className="px-4 py-4 text-right font-extrabold text-primary-800 whitespace-nowrap">
                     ฿{formatNumber(emp.amount)}
                   </td>
                   {DENOMINATIONS.map((denom) => (
-                    <td key={denom} className="px-6 py-5 text-right whitespace-nowrap">
+                    <td key={denom} className="px-2 sm:px-3 py-4 text-right">
                       <span
-                        className={`text-base font-extrabold tracking-tight ${
+                        className={`text-sm sm:text-base font-extrabold tracking-tight ${
                           emp.breakdown[denom] > 0
                             ? "text-primary-800"
                             : "text-primary-800/10"
