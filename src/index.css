@@ -118,7 +118,7 @@ h1, h2, h3, h4, .font-display {
   }
 
   .print-page-break {
-    break-after: page;
+    break-before: page;
   }
 
   /* Ensure containers don't break inside where possible */
