@@ -4,7 +4,7 @@ import tailwindcss from '@tailwindcss/vite'
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), tailwindcss()],
   build: {
     // เพิ่มลิมิตการเตือนขนาดไฟล์จาก 500kb เป็น 1500kb (1.5MB)
     chunkSizeWarningLimit: 1500,
